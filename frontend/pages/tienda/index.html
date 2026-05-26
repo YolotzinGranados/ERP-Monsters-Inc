@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monsters Inc — Tu tienda de todo</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+
+<!-- ANNOUNCEMENT -->
+<div class="announcement-bar">
+  <span>🚚 Envío GRATIS en compras mayores a $599</span>
+  <span>·</span>
+  <span>💳 3, 6 y 12 meses sin intereses</span>
+  <span>·</span>
+  <span>🔥 ¡Descuentos hasta 60% OFF en electrónica!</span>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="container">
+    <div class="nav-top">
+      <a href="#" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 2.61 1.36 4.9 3.4 6.22L7 21h10l-1.4-5.78C17.64 13.9 19 11.61 19 9c0-3.87-3.13-7-7-7zm0 2c2.76 0 5 2.24 5 5s-2.24 5-5 5-5-2.24-5-5 2.24-5 5-5zm-1 8h2v2h-2zm0-6h2v4h-2z"/>
+          </svg>
+        </div>
+        MONSTERS INC
+      </a>
+      <div class="search-bar">
+        <select>
+          <option>Todo</option>
+          <option>Electrónica</option>
+          <option>Ropa</option>
+          <option>Hogar</option>
+          <option>Alimentos</option>
+          <option>Deportes</option>
+        </select>
+        <input type="text" placeholder="¿Qué estás buscando hoy?">
+        <button>
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="nav-actions">
+        <a href="../ERP-Monsters-Inc/" class="nav-action" style="text-decoration:none;color:inherit;">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="width:24px;height:24px;"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          <span>ERP</span>
+        </a>
+        <div class="nav-action" onclick="showToast('Iniciando sesión...')">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          <span>Entrar</span>
+        </div>
+        <div class="nav-action" onclick="openWishlist()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span>Favoritos</span>
+        </div>
+        <div class="nav-action cart-badge" onclick="openCart()">
+          <div style="position:relative">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96C5 16.1 5.9 17 7 17h14v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63H19c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0 0 23.46 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+            <div class="badge" id="cart-count">3</div>
+          </div>
+          <span>Carrito</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bottom">
+    <div class="container">
+      <nav class="nav-cats">
+        <a class="nav-cat nav-cat-all" href="#">☰ Categorías</a>
+        <a class="nav-cat active" href="#">Ofertas del Día</a>
+        <a class="nav-cat" href="#">Electrónica</a>
+        <a class="nav-cat" href="#">Moda</a>
+        <a class="nav-cat" href="#">Hogar y Jardín</a>
+        <a class="nav-cat" href="#">Alimentos</a>
+        <a class="nav-cat" href="#">Salud y Belleza</a>
+        <a class="nav-cat" href="#">Deportes</a>
+        <a class="nav-cat" href="#">Juguetes</a>
+        <a class="nav-cat" href="#">Autos</a>
+        <a class="nav-cat" href="#">Mascotas</a>
+        <a class="nav-cat" href="#">Club Monsters</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<main>
+<section class="section" style="padding-top:24px; padding-bottom:0">
+  <div class="container">
+    <div class="hero">
+      <div class="hero-main">
+        <div class="hero-bg"></div>
+        <div class="hero-pattern"></div>
+        <div class="hero-img-placeholder">
+          <span class="big-icon">🛒</span>
+        </div>
+        <div class="hero-content">
+          <div class="hero-tag">Temporada de Ofertas</div>
+          <h1 class="hero-title">TODO LO QUE<br>NECESITAS <em>AQUÍ</em></h1>
+          <p class="hero-sub">Millones de productos al mejor precio. Desde electrónica hasta alimentos — tu tienda todo en uno.</p>
+          <div class="hero-cta">
+            <a href="#" class="btn btn-primary">Ver Ofertas →</a>
+            <a href="#" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.3)">Explorar</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-sidebar">
+        <div class="hero-card hero-card-1">
+          <div class="card-deco">💻</div>
+          <div class="card-label">Oferta Flash</div>
+          <div class="card-title">TECH SALE<br>HASTA 50% OFF</div>
+          <a href="#" class="card-link">Ver electrónica →</a>
+        </div>
+        <div class="hero-card hero-card-2">
+          <div class="card-deco">👗</div>
+          <div class="card-label">Nueva Colección</div>
+          <div class="card-title">MODA<br>PRIMAVERA 2026</div>
+          <a href="#" class="card-link" style="color:var(--accent2)">Descubrir moda →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="stat-item">
+      <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
+      <div class="stat-text"><strong>Envío Gratis</strong><span>En compras +$599</span></div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 4l5 2.18V11c0 3.5-2.33 6.79-5 7.93-2.67-1.14-5-4.43-5-7.93V7.18L12 5z"/></svg></div>
+      <div class="stat-text"><strong>Compra Segura</strong><span>Pago 100% protegido</span></div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+      <div class="stat-text"><strong>Devoluciones Fáciles</strong><span>30 días garantizados</span></div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg></div>
+      <div class="stat-text"><strong>Atención 24/7</strong><span>Chat y llamadas</span></div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M11.5 2C6.81 2 3 5.81 3 10.5S6.81 19 11.5 19h.5v3c4.86-2.34 8-7 8-11.5C20 5.81 16.19 2 11.5 2zm1 14.5h-2V15h2v1.5zm0-4h-2c0-3.25 3-3 3-5 0-1.1-.9-2-2-2s-2 .9-2 2h-2c0-2.21 1.79-4 4-4s4 1.79 4 4c0 2.5-3 2.75-3 5z"/></svg></div>
+      <div class="stat-text"><strong>+2M Productos</strong><span>Siempre disponibles</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Navega por</div>
+        <div class="section-title">CATEGORÍAS</div>
+      </div>
+      <a href="#" class="view-all">Ver todo →</a>
+    </div>
+    <div class="cats-grid">
+      <div class="cat-card"><div class="cat-icon">📱</div><div class="cat-name">Electrónica</div><div class="cat-count">48,231 items</div></div>
+      <div class="cat-card"><div class="cat-icon">👗</div><div class="cat-name">Ropa</div><div class="cat-count">125,430 items</div></div>
+      <div class="cat-card"><div class="cat-icon">🏠</div><div class="cat-name">Hogar</div><div class="cat-count">89,102 items</div></div>
+      <div class="cat-card"><div class="cat-icon">🛒</div><div class="cat-name">Alimentos</div><div class="cat-count">34,700 items</div></div>
+      <div class="cat-card"><div class="cat-icon">💪</div><div class="cat-name">Deportes</div><div class="cat-count">22,890 items</div></div>
+      <div class="cat-card"><div class="cat-icon">🧴</div><div class="cat-name">Belleza</div><div class="cat-count">41,560 items</div></div>
+      <div class="cat-card"><div class="cat-icon">🧸</div><div class="cat-name">Juguetes</div><div class="cat-count">18,340 items</div></div>
+      <div class="cat-card"><div class="cat-icon">🐾</div><div class="cat-name">Mascotas</div><div class="cat-count">9,210 items</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS - Destacados -->
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Lo más vendido</div>
+        <div class="section-title">PRODUCTOS DESTACADOS</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline" style="padding:10px 16px;font-size:12px">Novedades</button>
+        <button class="btn btn-dark" style="padding:10px 16px;font-size:12px">Más vendidos</button>
+        <button class="btn btn-outline" style="padding:10px 16px;font-size:12px">Mejor precio</button>
+      </div>
+    </div>
+    <div class="products-grid">
+
+      <div class="product-card">
+        <div class="product-img" style="background:#f0f4ff">
+          <div class="product-badges"><span class="tag tag-red">-35%</span></div>
+          <div class="product-wishlist"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          <span class="p-icon">📱</span>
+        </div>
+        <div class="product-info">
+          <div class="product-brand">Samsung</div>
+          <div class="product-name">Galaxy A55 5G 128GB — Azul Hielo</div>
+          <div class="product-stars"><span class="stars">★★★★★</span><span class="star-count">(1,248)</span></div>
+          <div class="product-price"><span class="price-now">$7,499</span><span class="price-was">$11,499</span><span class="price-save">Ahorras $4,000</span></div>
+          <button class="product-add" onclick="addToCart('Galaxy A55 5G')">Agregar al carrito</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img" style="background:#fff8f0">
+          <div class="product-badges"><span class="tag tag-yellow">HOT</span></div>
+          <div class="product-wishlist"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          <span class="p-icon">🎧</span>
+        </div>
+        <div class="product-info">
+          <div class="product-brand">Sony</div>
+          <div class="product-name">WH-1000XM5 Noise Cancelling</div>
+          <div class="product-stars"><span class="stars">★★★★★</span><span class="star-count">(3,891)</span></div>
+          <div class="product-price"><span class="price-now">$5,299</span><span class="price-was">$6,999</span><span class="price-save">Ahorras $1,700</span></div>
+          <button class="product-add" onclick="addToCart('Sony WH-1000XM5')">Agregar al carrito</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img" style="background:#f0fff4">
+          <div class="product-badges"><span class="tag tag-dark">NUEVO</span></div>
+          <div class="product-wishlist"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          <span class="p-icon">💻</span>
+        </div>
+        <div class="product-info">
+          <div class="product-brand">Lenovo</div>
+          <div class="product-name">IdeaPad 3 Intel i5 8GB RAM 512GB SSD</div>
+          <div class="product-stars"><span class="stars">★★★★☆</span><span class="star-count">(567)</span></div>
+          <div class="product-price"><span class="price-now">$12,999</span><span class="price-was">$15,999</span><span class="price-save">Ahorras $3,000</span></div>
+          <button class="product-add" onclick="addToCart('Lenovo IdeaPad 3')">Agregar al carrito</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img" style="background:#fff0f8">
+          <div class="product-badges"><span class="tag tag-red">-40%</span></div>
+          <div class="product-wishlist"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          <span class="p-icon">⌚</span>
+        </div>
+        <div class="product-info">
+          <div class="product-brand">Xiaomi</div>
+          <div class="product-name">Smart Band 8 Pro AMOLED GPS</div>
+          <div class="product-stars"><span class="stars">★★★★★</span><span class="star-count">(2,145)</span></div>
+          <div class="product-price"><span class="price-now">$999</span><span class="price-was">$1,699</span><span class="price-save">Ahorras $700</span></div>
+          <button class="product-add" onclick="addToCart('Xiaomi Smart Band 8')">Agregar al carrito</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img" style="background:#f5f0ff">
+          <div class="product-badges"><span class="tag tag-yellow">PROMO</span></div>
+          <div class="product-wishlist"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          <span class="p-icon">🖨️</span>
+        </div>
+        <div class="product-info">
+          <div class="product-brand">HP</div>
+          <div class="product-name">DeskJet 2775 Impresora Multifuncional WiFi</div>
+          <div class="product-stars"><span class="stars">★★★★☆</span><span class="star-count">(891)</span></div>
+          <div class="product-price"><span class="price-now">$1,599</span><span class="price-was">$2,299</span><span class="price-save">Ahorras $700</span></div>
+          <button class="product-add" onclick="addToCart('HP DeskJet 2775')">Agregar al carrito</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROMO BANNERS -->
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <div class="promo-grid">
+      <div class="promo-card promo-card-1">
+        <div class="promo-deco">🏡</div>
+        <div class="promo-tag">Renovación del Hogar</div>
+        <div class="promo-title">HOGAR &<br>JARDÍN -30%</div>
+        <a href="#" class="promo-link">Comprar ahora →</a>
+      </div>
+      <div class="promo-card promo-card-2">
+        <div class="promo-deco">👟</div>
+        <div class="promo-tag">Temporada Activa</div>
+        <div class="promo-title">DEPORTES<br>-25% HOY</div>
+        <a href="#" class="promo-link">Ver colección →</a>
+      </div>
+      <div class="promo-card promo-card-3">
+        <div class="promo-deco">🍔</div>
+        <div class="promo-tag">Club Monsters</div>
+        <div class="promo-title">DESPENSA<br>2x1 GRANOS</div>
+        <a href="#" class="promo-link">Activar beneficio →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEAL OF THE DAY -->
+<div class="deal-section">
+  <div class="container">
+    <div class="deal-inner">
+      <div class="deal-left">
+        <div class="deal-label">⚡ Oferta del Día</div>
+        <div class="deal-title">PRECIO<br>IMPOSIBLE<br>HOY</div>
+        <div class="deal-desc">La oferta más esperada del año. Cantidad limitada — no dejes pasar esta oportunidad única.</div>
+        <div class="deal-timer">
+          <div class="timer-unit"><div class="timer-num" id="t-h">08</div><div class="timer-label">horas</div></div>
+          <div class="timer-sep">:</div>
+          <div class="timer-unit"><div class="timer-num" id="t-m">47</div><div class="timer-label">min</div></div>
+          <div class="timer-sep">:</div>
+          <div class="timer-unit"><div class="timer-num" id="t-s">33</div><div class="timer-label">seg</div></div>
+        </div>
+        <div class="deal-price">
+          <span class="deal-price-now">$3,499</span>
+          <span class="deal-price-was">$8,999</span>
+          <span class="tag tag-red">-61%</span>
+        </div>
+        <button class="btn btn-primary" style="font-size:15px;padding:16px 32px" onclick="addToCart(1)">Agregar al carrito →</button>
+      </div>
+      <div class="deal-product">
+        <div class="deal-img">📺</div>
+        <div class="deal-product-name">Amazon Fire TV 4K Max</div>
+        <div class="deal-product-brand">Con Alexa Voice Remote Pro</div>
+        <div class="deal-progress">
+          <div class="progress-info"><span>🔥 ¡Se han vendido 67 de 100!</span><span>Quedan: 33</span></div>
+          <div class="progress-bar"><div class="progress-fill"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MORE PRODUCTS - Hogar -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Para tu casa</div>
+        <div class="section-title">HOGAR Y JARDÍN</div>
+      </div>
+      <a href="#" class="view-all">Ver todo →</a>
+    </div>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="product-img" style="background:#f0fff8"><div class="product-badges"><span class="tag tag-red">-20%</span></div><div class="product-wishlist"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><span class="p-icon">🧹</span></div>
+        <div class="product-info"><div class="product-brand">Xiaomi</div><div class="product-name">Robot Aspirador Mi 4 Pro WiFi</div><div class="product-stars"><span class="stars">★★★★★</span><span class="star-count">(892)</span></div><div class="product-price"><span class="price-now">$4,799</span><span class="price-was">$5,999</span></div><button class="product-add" onclick="addToCart('Xiaomi Robot Aspirador')">Agregar al carrito</button></div>
+      </div>
+      <div class="product-card">
+        <div class="product-img" style="background:#fffbf0"><div class="product-wishlist"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><span class="p-icon">☕</span></div>
+        <div class="product-info"><div class="product-brand">Nespresso</div><div class="product-name">Vertuo Pop Cafetera + 40 Cápsulas</div><div class="product-stars"><span class="stars">★★★★★</span><span class="star-count">(2,341)</span></div><div class="product-price"><span class="price-now">$2,199</span><span class="price-was">$2,799</span></div><button class="product-add" onclick="addToCart('Nespresso Vertuo Pop')">Agregar al carrito</button></div>
+      </div>
+      <div class="product-card">
+        <div class="product-img" style="background:#f0f4ff"><div class="product-badges"><span class="tag tag-yellow">NUEVO</span></div><div class="product-wishlist"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><span class="p-icon">🌡️</span></div>
+        <div class="product-info"><div class="product-brand">Philips</div><div class="product-name">Aire Acondicionado Portátil 9000 BTU</div><div class="product-stars"><span class="stars">★★★★☆</span><span class="star-count">(432)</span></div><div class="product-price"><span class="price-now">$8,499</span><span class="price-was">$10,999</span></div><button class="product-add" onclick="addToCart('Philips Aire Portátil')">Agregar al carrito</button></div>
+      </div>
+      <div class="product-card">
+        <div class="product-img" style="background:#fff0f0"><div class="product-wishlist"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><span class="p-icon">🪴</span></div>
+        <div class="product-info"><div class="product-brand">Oster</div><div class="product-name">Licuadora Pro Series 1000W 8 Vel.</div><div class="product-stars"><span class="stars">★★★★☆</span><span class="star-count">(671)</span></div><div class="product-price"><span class="price-now">$1,299</span><span class="price-was">$1,799</span></div><button class="product-add" onclick="addToCart('Oster Licuadora Pro')">Agregar al carrito</button></div>
+      </div>
+      <div class="product-card">
+        <div class="product-img" style="background:#f5f0ff"><div class="product-badges"><span class="tag tag-red">-30%</span></div><div class="product-wishlist"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><span class="p-icon">🛏️</span></div>
+        <div class="product-info"><div class="product-brand">Casa Textil</div><div class="product-name">Juego de Sábanas King 500 Hilos Pima</div><div class="product-stars"><span class="stars">★★★★★</span><span class="star-count">(1,203)</span></div><div class="product-price"><span class="price-now">$899</span><span class="price-was">$1,299</span></div><button class="product-add" onclick="addToCart('Sábanas King 500 Hilos')">Agregar al carrito</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRANDS -->
+<div class="brands-strip">
+  <div class="container">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--muted);margin-bottom:16px;text-transform:uppercase">Marcas que manejamos</div>
+    <div class="brands-scroll">
+      <span class="brand-item">SAMSUNG</span>
+      <span class="brand-item">SONY</span>
+      <span class="brand-item">APPLE</span>
+      <span class="brand-item">LG</span>
+      <span class="brand-item">NIKE</span>
+      <span class="brand-item">ADIDAS</span>
+      <span class="brand-item">XIAOMI</span>
+      <span class="brand-item">HP</span>
+      <span class="brand-item">LENOVO</span>
+      <span class="brand-item">PHILIPS</span>
+      <span class="brand-item">OSTER</span>
+      <span class="brand-item">NESPRESSO</span>
+      <span class="brand-item">NINTENDO</span>
+      <span class="brand-item">LEGO</span>
+    </div>
+  </div>
+</div>
+
+<!-- REVIEWS -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Lo que dicen</div>
+        <div class="section-title">CLIENTES FELICES</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:28px;font-weight:700;color:var(--accent)">4.8</span>
+        <div><div style="color:#FFD60A;font-size:18px">★★★★★</div><div style="font-size:12px;color:var(--muted)">+48,000 reseñas</div></div>
+      </div>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-header">
+          <div class="reviewer">
+            <div class="reviewer-avatar" style="background:#FF3B1E">MG</div>
+            <div><div class="reviewer-name">María G.</div><div class="reviewer-date">Hace 2 días</div></div>
+          </div>
+          <div style="color:#FFD60A;font-size:14px">★★★★★</div>
+        </div>
+        <div class="review-text">"Increíble experiencia. Mis audífonos llegaron al día siguiente bien empacados y exactamente como los describían. La aplicación es muy fácil de usar."</div>
+        <div class="review-product">Producto: Sony WH-1000XM5</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="reviewer">
+            <div class="reviewer-avatar" style="background:#1a1a2e">RL</div>
+            <div><div class="reviewer-name">Roberto L.</div><div class="reviewer-date">Hace 5 días</div></div>
+          </div>
+          <div style="color:#FFD60A;font-size:14px">★★★★★</div>
+        </div>
+        <div class="review-text">"Compro aquí cada semana. Los precios del Club Monsters no los encuentro en ningún otro lugar. La sección de despensa tiene todo lo que necesito."</div>
+        <div class="review-product">Club Monsters Premium</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="reviewer">
+            <div class="reviewer-avatar" style="background:#3B6D11">AP</div>
+            <div><div class="reviewer-name">Ana P.</div><div class="reviewer-date">Hace 1 semana</div></div>
+          </div>
+          <div style="color:#FFD60A;font-size:14px">★★★★★</div>
+        </div>
+        <div class="review-text">"Devolución sin complicaciones. Compré una talla equivocada y el proceso fue súper sencillo. El equipo de atención al cliente respondió en minutos."</div>
+        <div class="review-product">Ropa — Tenis Nike Air Max</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<div class="newsletter">
+  <div class="container">
+    <div class="newsletter-inner">
+      <div>
+        <div class="newsletter-title">OFERTAS<br>EXCLUSIVAS<br>PARA TI</div>
+        <p class="newsletter-sub">Únete a más de 2 millones de personas que ya reciben las mejores ofertas antes que nadie. Sin spam, solo lo bueno.</p>
+      </div>
+      <div>
+        <div class="newsletter-form">
+          <input class="newsletter-input" type="email" placeholder="tu@correo.com">
+          <button class="newsletter-btn" onclick="showToast('¡Te has suscrito exitosamente! 🎉')">SUSCRIBIRSE</button>
+        </div>
+        <p style="font-size:11px;color:rgba(0,0,0,.4);margin-top:10px">Al suscribirte aceptas nuestros términos. Puedes cancelar cuando quieras.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo" style="margin-bottom:14px">
+          <div class="logo-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.61 1.36 4.9 3.4 6.22L7 21h10l-1.4-5.78C17.64 13.9 19 11.61 19 9c0-3.87-3.13-7-7-7zm0 2c2.76 0 5 2.24 5 5s-2.24 5-5 5-5-2.24-5-5 2.24-5 5-5zm-1 8h2v2h-2zm0-6h2v4h-2z"/></svg></div>
+          MONSTERS INC
+        </div>
+        <p>Tu tienda de todo. Millones de productos, los mejores precios y la entrega más rápida. Somos el hogar de los mejores compradores de México.</p>
+        <div class="footer-social">
+          <div class="social-btn"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></div>
+          <div class="social-btn"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" fill="none" stroke="white" stroke-width="2"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="white" stroke-width="2"/></svg></div>
+          <div class="social-btn"><svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.95C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.95A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.54C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="black"/></svg></div>
+          <div class="social-btn"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.17a8.16 8.16 0 0 0 4.77 1.52V7.25a4.85 4.85 0 0 1-1-.56z"/></svg></div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Comprar</h4>
+        <ul>
+          <li><a href="#">Ofertas del día</a></li>
+          <li><a href="#">Electrónica</a></li>
+          <li><a href="#">Moda y ropa</a></li>
+          <li><a href="#">Hogar y jardín</a></li>
+          <li><a href="#">Alimentos</a></li>
+          <li><a href="#">Salud y belleza</a></li>
+          <li><a href="#">Deportes</a></li>
+          <li><a href="#">Juguetes</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Tu Cuenta</h4>
+        <ul>
+          <li><a href="#">Iniciar sesión</a></li>
+          <li><a href="#">Registrarse</a></li>
+          <li><a href="#">Mis pedidos</a></li>
+          <li><a href="#">Lista de deseos</a></li>
+          <li><a href="#">Club Monsters</a></li>
+          <li><a href="#">Configuración</a></li>
+          <li><a href="#">Direcciones</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Ayuda</h4>
+        <ul>
+          <li><a href="#">Centro de ayuda</a></li>
+          <li><a href="#">Rastrear mi pedido</a></li>
+          <li><a href="#">Devoluciones</a></li>
+          <li><a href="#">Política de envíos</a></li>
+          <li><a href="#">Vende con nosotros</a></li>
+          <li><a href="#">Bolsa de trabajo</a></li>
+          <li><a href="#">Prensa</a></li>
+          <li><a href="#">Privacidad</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Monsters Inc. Todos los derechos reservados.</p>
+      <div class="footer-payments">
+        <span style="font-size:11px;color:rgba(255,255,255,.3);margin-right:4px">Aceptamos:</span>
+        <div class="payment-icon">VISA</div>
+        <div class="payment-icon">MC</div>
+        <div class="payment-icon">AMEX</div>
+        <div class="payment-icon">OXXO</div>
+        <div class="payment-icon">SPEI</div>
+        <div class="payment-icon">PayPal</div>
+      </div>
+    </div>
+  </div>
+</footer>
+</main>
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h2>MI CARRITO</h2>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-item">
+      <div class="cart-item-img">📱</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">Samsung Galaxy A55 5G</div>
+        <div class="cart-item-price">$7,499</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn">−</button>
+          <span class="qty-val">1</span>
+          <button class="qty-btn">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="cart-item">
+      <div class="cart-item-img">🎧</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">Sony WH-1000XM5</div>
+        <div class="cart-item-price">$5,299</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn">−</button>
+          <span class="qty-val">1</span>
+          <button class="qty-btn">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="cart-item">
+      <div class="cart-item-img">⌚</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">Xiaomi Smart Band 8 Pro</div>
+        <div class="cart-item-price">$999</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn">−</button>
+          <span class="qty-val">1</span>
+          <button class="qty-btn">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cart-footer">
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:8px"><span>Subtotal</span><span>$13,797</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:#16a34a;margin-bottom:12px"><span>🚚 Envío gratis</span><span>¡Lo tienes!</span></div>
+    <div class="cart-total">
+      <span>Total</span>
+      <strong>$13,797</strong>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;font-size:15px;padding:16px" onclick="showToast('Redirigiendo al pago...')">Proceder al pago →</button>
+    <button class="btn btn-outline" style="width:100%;justify-content:center;margin-top:8px;font-size:13px" onclick="closeCart()">Seguir comprando</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-icon">✓</span>
+  <span id="toast-msg">Producto agregado</span>
+</div>
+<script src="script.js">
+
+</script>
+</body>
+</html>

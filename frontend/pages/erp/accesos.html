@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accesos — MonsterERP</title>
+    <link rel="stylesheet" href="../../assets/css/global.css">
+</head>
+<body>
+    <div class="erp-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <span class="brand-name">🦾 MonsterERP</span>
+                <button class="toggle-btn" id="toggleSidebar">☰</button>
+            </div>
+            <nav class="sidebar-nav"><ul>
+                <li><a href="./dashboard.html"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></a></li>
+                <li><a href="./clientes.html"><span class="nav-icon">👥</span><span class="nav-label">Clientes</span></a></li>
+                <li><a href="./ventas.html"><span class="nav-icon">💰</span><span class="nav-label">Ventas</span></a></li>
+                <li><a href="./inventario.html"><span class="nav-icon">📦</span><span class="nav-label">Inventario</span></a></li>
+                <li><a href="./reportes.html"><span class="nav-icon">📈</span><span class="nav-label">Reportes</span></a></li>
+                <li><a href="./facturas.html"><span class="nav-icon">🧾</span><span class="nav-label">Facturación</span></a></li>
+                <li><a href="./envios.html"><span class="nav-icon">🚚</span><span class="nav-label">Envíos</span></a></li>
+                <li><a href="./accesos.html"><span class="nav-icon">🔐</span><span class="nav-label">Accesos</span></a></li>
+                <li><a href="./bitacora.html"><span class="nav-icon">📖</span><span class="nav-label">Bitácora</span></a></li>
+            </ul></nav>
+        </aside>
+        <div class="main-wrapper" id="mainWrapper">
+            <header class="topbar">
+                <h1 class="topbar-title">Gestión de Accesos (RBAC)</h1>
+                <div class="topbar-actions">
+                    <button class="btn btn-ghost btn-icon" id="darkModeBtn">🌙</button>
+                    <button class="btn btn-danger btn-sm" id="logoutBtn">Salir</button>
+                </div>
+            </header>
+            <main class="page-content" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px;">
+                
+                <!-- Columna Izquierda: Empleados -->
+                <div style="display: flex; flex-direction: column; gap: 24px;">
+                    <div class="form-card">
+                        <h2>Registrar nuevo empleado</h2>
+                        <div class="form-grid">
+                            <input type="text" id="employeeName" placeholder="Nombre completo">
+                            <input type="email" id="employeeEmail" placeholder="correo@monsters.com">
+                            <select id="employeeRole"></select>
+                            <select id="employeeBranch"></select>
+                        </div>
+                        <button class="btn btn-primary" id="createEmployee" style="margin-top: 16px;">+ Registrar Empleado</button>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <div class="table-header"><h2>Empleados del sistema</h2></div>
+                        <div class="table-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Correo</th>
+                                        <th>Rol</th>
+                                        <th>Sucursal</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="employeeRows">
+                                    <tr><td colspan="6"><div class="spinner"></div></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Roles y Permisos -->
+                <div class="form-card">
+                    <h2>Roles y Permisos</h2>
+                    <div class="form-grid" style="grid-template-columns: 1fr;">
+                        <div>
+                            <label style="font-size:13px;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:6px;">Seleccionar Rol a Editar</label>
+                            <select id="roleEditor"></select>
+                        </div>
+                    </div>
+                    <h3 style="font-size: 15px; font-weight: 700; margin-top: 24px; margin-bottom: 12px;">Permisos para el rol seleccionado</h3>
+                    <div id="permissionChecklist" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-height: 300px; overflow-y: auto; border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-sm);">
+                        <div class="spinner"></div>
+                    </div>
+                    <button class="btn btn-success" id="saveRoleChanges" style="margin-top: 16px;">Guardar Permisos</button>
+                </div>
+
+            </main>
+        </div>
+    </div>
+    <div id="toastContainer"></div>
+    <script src="../../assets/js/layout.js"></script>
+    <script src="../../assets/js/access.js"></script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventas — MonsterERP</title>
+    <link rel="stylesheet" href="../../assets/css/global.css">
+</head>
+<body>
+    <div class="erp-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <span class="brand-name">🦾 MonsterERP</span>
+                <button class="toggle-btn" id="toggleSidebar">☰</button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="./dashboard.html"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></a></li>
+                    <li><a href="./clientes.html"><span class="nav-icon">👥</span><span class="nav-label">Clientes</span></a></li>
+                    <li><a href="./ventas.html"><span class="nav-icon">💰</span><span class="nav-label">Ventas</span></a></li>
+                    <li><a href="./inventario.html"><span class="nav-icon">📦</span><span class="nav-label">Inventario</span></a></li>
+                    <li><a href="./reportes.html"><span class="nav-icon">📈</span><span class="nav-label">Reportes</span></a></li>
+                    <li><a href="./facturas.html"><span class="nav-icon">🧾</span><span class="nav-label">Facturación</span></a></li>
+                    <li><a href="./envios.html"><span class="nav-icon">🚚</span><span class="nav-label">Envíos</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+        <div class="main-wrapper" id="mainWrapper">
+            <header class="topbar">
+                <h1 class="topbar-title">Nueva Venta</h1>
+                <div class="topbar-actions">
+                    <button class="btn btn-ghost btn-icon" id="darkModeBtn">🌙</button>
+                    <button class="btn btn-danger btn-sm" id="logoutBtn">Salir</button>
+                </div>
+            </header>
+            <main class="page-content">
+
+                <!-- VENTA FORM -->
+                <div class="form-card">
+                    <h2>Datos de la venta</h2>
+                    <div class="form-grid">
+                        <div>
+                            <label style="font-size:13px;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:6px;">Cliente</label>
+                            <select id="clienteSelect"></select>
+                        </div>
+                        <div>
+                            <label style="font-size:13px;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:6px;">Sucursal</label>
+                            <select id="sucursalSelect">
+                                <option value="1">Sucursal Monterrey</option>
+                                <option value="2">Sucursal CDMX</option>
+                                <option value="3">Sucursal Cancún</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size:13px;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:6px;">Canal</label>
+                            <select id="canalSelect">
+                                <option value="Fisica">Física</option>
+                                <option value="Linea">Línea</option>
+                                <option value="Corporativo">Corporativo</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AGREGAR PRODUCTO -->
+                <div class="form-card">
+                    <h2>Agregar productos</h2>
+                    <div class="form-grid">
+                        <select id="productoSelect"></select>
+                        <input type="number" id="cantidadInput" placeholder="Cantidad" min="1">
+                        <button class="btn btn-success" id="addProductBtn">+ Agregar</button>
+                    </div>
+                </div>
+
+                <!-- CARRITO -->
+                <div class="table-wrapper" style="margin-bottom:20px;">
+                    <div class="table-header">
+                        <h2>Carrito</h2>
+                        <span id="totalText" style="font-size:18px;font-weight:800;color:var(--accent-blue);">Total: 0 productos</span>
+                    </div>
+                    <div class="table-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio unit.</th>
+                                    <th>Subtotal</th>
+                                    <th>Quitar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cartTable">
+                                <tr><td colspan="5">
+                                    <div class="empty-state">
+                                        <div class="empty-icon">🛒</div>
+                                        <p>Sin productos en el carrito</p>
+                                    </div>
+                                </td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div style="display:flex;justify-content:flex-end;">
+                    <button class="btn btn-primary" id="createSaleBtn" style="font-size:16px;padding:14px 32px;">
+                        ✅ Crear Venta
+                    </button>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <div id="toastContainer"></div>
+
+    <script src="../../assets/js/layout.js"></script>
+    <script src="../../assets/js/ventas.js"></script>
+</body>
+</html>

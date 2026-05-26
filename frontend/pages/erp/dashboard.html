@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — MonsterERP</title>
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="erp-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <span class="brand-name">🦾 MonsterERP</span>
+                <button class="toggle-btn" id="toggleSidebar">☰</button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="./dashboard.html">
+                        <span class="nav-icon">📊</span>
+                        <span class="nav-label">Dashboard</span>
+                    </a></li>
+                    <li><a href="./clientes.html">
+                        <span class="nav-icon">👥</span>
+                        <span class="nav-label">Clientes</span>
+                    </a></li>
+                    <li><a href="./ventas.html">
+                        <span class="nav-icon">💰</span>
+                        <span class="nav-label">Ventas</span>
+                    </a></li>
+                    <li><a href="./inventario.html">
+                        <span class="nav-icon">📦</span>
+                        <span class="nav-label">Inventario</span>
+                    </a></li>
+                    <li><a href="./reportes.html">
+                        <span class="nav-icon">📈</span>
+                        <span class="nav-label">Reportes</span>
+                    </a></li>
+                    <li><a href="./facturas.html">
+                        <span class="nav-icon">🧾</span>
+                        <span class="nav-label">Facturación</span>
+                    </a></li>
+                    <li><a href="./envios.html">
+                        <span class="nav-icon">🚚</span>
+                        <span class="nav-label">Envíos</span>
+                    </a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- MAIN -->
+        <div class="main-wrapper" id="mainWrapper">
+
+            <!-- TOPBAR -->
+            <header class="topbar">
+                <h1 class="topbar-title">Dashboard</h1>
+                <div class="topbar-actions">
+                    <button class="btn btn-ghost btn-icon" id="darkModeBtn" title="Modo oscuro">🌙</button>
+                    <button class="btn btn-danger btn-sm" id="logoutBtn">Cerrar sesión</button>
+                </div>
+            </header>
+
+            <!-- CONTENT -->
+            <main class="page-content">
+
+                <!-- KPI CARDS -->
+                <div class="kpi-grid">
+                    <div class="kpi-card green">
+                        <div class="kpi-info">
+                            <h3>Ventas totales</h3>
+                            <p id="ventasTotales">—</p>
+                            <span class="badge-growth up">↑ 12%</span>
+                        </div>
+                        <div class="kpi-icon">💰</div>
+                    </div>
+                    <div class="kpi-card blue">
+                        <div class="kpi-info">
+                            <h3>Ingresos</h3>
+                            <p id="ingresosTotales">—</p>
+                            <span class="badge-growth up">↑ 8%</span>
+                        </div>
+                        <div class="kpi-icon">📈</div>
+                    </div>
+                    <div class="kpi-card purple">
+                        <div class="kpi-info">
+                            <h3>Clientes</h3>
+                            <p id="clientesTotales">—</p>
+                            <span class="badge-growth up">↑ 15%</span>
+                        </div>
+                        <div class="kpi-icon">👥</div>
+                    </div>
+                    <div class="kpi-card red">
+                        <div class="kpi-info">
+                            <h3>Stock crítico</h3>
+                            <p id="inventarioCritico">—</p>
+                            <span class="badge-growth down">↓ 3%</span>
+                        </div>
+                        <div class="kpi-icon">⚠️</div>
+                    </div>
+                </div>
+
+                <!-- CHARTS -->
+                <div class="dash-grid-2 mb-6">
+                    <div class="card">
+                        <h2 class="card-title">Ventas por canal</h2>
+                        <canvas id="salesChannelChart"></canvas>
+                    </div>
+                    <div class="card">
+                        <h2 class="card-title">Ventas por región</h2>
+                        <canvas id="salesRegionChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- EXECUTIVE GRID -->
+                <div class="dash-grid-2 mb-6">
+                    <div class="card">
+                        <h2 class="card-title">Actividad reciente</h2>
+                        <div id="activityList">
+                            <div class="alert alert-success">✅ Venta registrada</div>
+                            <div class="alert alert-success">📦 Inventario actualizado</div>
+                            <div class="alert alert-success">👤 Nuevo cliente agregado</div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h2 class="card-title">Alertas de inventario</h2>
+                        <div id="alertList">
+                            <div class="alert alert-danger">⚠️ Proteína Whey con stock bajo</div>
+                            <div class="alert alert-warning">⚠️ Creatina próxima a agotarse</div>
+                            <div class="alert alert-success">✅ Inventario sincronizado</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TOP PRODUCTS TABLE -->
+                <div class="table-wrapper">
+                    <div class="table-header">
+                        <h2>Top productos</h2>
+                    </div>
+                    <div class="table-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Producto</th>
+                                    <th>Total vendido</th>
+                                </tr>
+                            </thead>
+                            <tbody id="topProductsTable">
+                                <tr><td colspan="3"><div class="spinner"></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <div id="toastContainer"></div>
+
+    <script src="../../assets/js/layout.js"></script>
+    <script src="../../assets/js/dashboard.js"></script>
+</body>
+</html>

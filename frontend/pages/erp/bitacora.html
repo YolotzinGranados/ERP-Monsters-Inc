@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitácora — MonsterERP</title>
+    <link rel="stylesheet" href="../../assets/css/global.css">
+</head>
+<body>
+    <div class="erp-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <span class="brand-name">🦾 MonsterERP</span>
+                <button class="toggle-btn" id="toggleSidebar">☰</button>
+            </div>
+            <nav class="sidebar-nav"><ul>
+                <li><a href="./dashboard.html"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></a></li>
+                <li><a href="./clientes.html"><span class="nav-icon">👥</span><span class="nav-label">Clientes</span></a></li>
+                <li><a href="./ventas.html"><span class="nav-icon">💰</span><span class="nav-label">Ventas</span></a></li>
+                <li><a href="./inventario.html"><span class="nav-icon">📦</span><span class="nav-label">Inventario</span></a></li>
+                <li><a href="./reportes.html"><span class="nav-icon">📈</span><span class="nav-label">Reportes</span></a></li>
+                <li><a href="./facturas.html"><span class="nav-icon">🧾</span><span class="nav-label">Facturación</span></a></li>
+                <li><a href="./envios.html"><span class="nav-icon">🚚</span><span class="nav-label">Envíos</span></a></li>
+                <li><a href="./accesos.html"><span class="nav-icon">🔐</span><span class="nav-label">Accesos</span></a></li>
+                <li><a href="./bitacora.html"><span class="nav-icon">📖</span><span class="nav-label">Bitácora</span></a></li>
+            </ul></nav>
+        </aside>
+        <div class="main-wrapper" id="mainWrapper">
+            <header class="topbar">
+                <h1 class="topbar-title">Bitácora de Auditoría</h1>
+                <div class="topbar-actions">
+                    <button class="btn btn-ghost btn-icon" id="darkModeBtn">🌙</button>
+                    <button class="btn btn-danger btn-sm" id="logoutBtn">Salir</button>
+                </div>
+            </header>
+            <main class="page-content">
+                <div class="table-wrapper">
+                    <div class="table-header"><h2>Últimas 250 acciones registradas en el sistema</h2></div>
+                    <div class="table-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Fecha y Hora</th>
+                                    <th>Empleado</th>
+                                    <th>Acción Realizada</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logsTable">
+                                <tr><td colspan="3"><div class="spinner"></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <div id="toastContainer"></div>
+    <script src="../../assets/js/layout.js"></script>
+    <script src="../../assets/js/bitacora.js"></script>
+</body>
+</html>

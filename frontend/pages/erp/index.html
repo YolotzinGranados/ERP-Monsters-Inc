@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Monsters Inc. ERP</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <section class="login-view" id="loginView">
+    <form class="login-card" id="loginForm">
+      <div class="brand login-brand">
+        <div class="brand-mark">MI</div>
+        <div>
+          <strong>Monsters Inc. ERP</strong>
+          <span>Acceso interno por rol</span>
+        </div>
+      </div>
+      <label>Correo
+        <input id="loginEmail" type="email" value="admin@monsters.com" autocomplete="username" required>
+      </label>
+      <label>Contraseña
+        <input id="loginPassword" type="password" value="Admin123*" autocomplete="current-password" required>
+      </label>
+      <button type="submit">Iniciar sesion</button>
+      <p class="muted" id="loginMessage">Usa las credenciales de empleados registradas en la base de datos.</p>
+      <div class="creds-hint">
+        <strong>👤 Credenciales de acceso</strong>
+        <div class="cred-row"><span>Administrador</span><span>admin@monsters.com / Admin123*</span></div>
+        <div class="cred-row"><span>Gerente</span><span>gerente@monsters.com / Gerente123*</span></div>
+        <div class="cred-row"><span>Vendedor</span><span>vendedor@monsters.com / Vendedor123*</span></div>
+        <div class="cred-row"><span>Almacén</span><span>almacen@monsters.com / Almacen123*</span></div>
+        <div class="cred-row"><span>Contador</span><span>contador@monsters.com / Contador123*</span></div>
+      </div>
+    </form>
+  </section>
+
+  <aside class="sidebar app-shell">
+    <div class="brand">
+      <div class="brand-mark">MI</div>
+      <div>
+        <strong>Monsters Inc. ERP</strong>
+        <span>Ventas, inventario y operaciones</span>
+      </div>
+    </div>
+    <label class="role-picker">Rol actual
+      <select id="currentRole"></select>
+    </label>
+    <div class="session-box">
+      <span>Sesion iniciada</span>
+      <strong id="sessionUser">Sin usuario</strong>
+    </div>
+    <nav id="navigation"></nav>
+    <button class="ghost full" id="resetState">Recargar datos de BD</button>
+    <button class="ghost full danger-text" id="logoutButton">Cerrar sesion</button>
+  </aside>
+
+  <main class="app app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Operacion central Monster Inc.</p>
+        <h1 id="screenTitle">Tablero operativo</h1>
+      </div>
+      <div class="top-actions">
+        <button id="simulateOnline">Pedido online</button>
+        <button id="simulateCorporate">Contrato corporativo</button>
+        <button id="exportAll">Exportar CSV</button>
+      </div>
+    </header>
+
+    <section class="screen active" id="dashboard">
+      <div class="kpis" id="kpiCards"></div>
+      <div class="grid two">
+        <article class="panel">
+          <div class="panel-head">
+          <h2>Ventas por canal</h2>
+            <button class="ghost" data-export="sales">CSV</button>
+          </div>
+          <canvas id="channelChart" height="220"></canvas>
+        </article>
+        <article class="panel">
+          <div class="panel-head">
+            <h2>Clientes por origen</h2>
+            <button class="ghost" data-export="clients">CSV</button>
+          </div>
+          <canvas id="clientChart" height="220"></canvas>
+        </article>
+      </div>
+      <div class="grid two">
+        <article class="panel">
+          <div class="panel-head">
+            <h2>Clientes por lugar de gestion</h2>
+            <button class="ghost" data-export="branches">CSV</button>
+          </div>
+          <canvas id="branchChart" height="220"></canvas>
+        </article>
+        <article class="panel">
+          <div class="panel-head">
+            <h2>Ultimas acciones</h2>
+            <button class="ghost" data-screen="logs">Ver todo</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Fecha</th><th>Rol</th><th>Canal</th><th>Accion</th></tr></thead>
+              <tbody id="recentLogRows"></tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="screen" id="pos">
+      <div class="grid pos-layout">
+        <article class="panel">
+          <div class="panel-head">
+          <h2>Punto de venta</h2>
+            <span class="pill">Punto Fisico</span>
+          </div>
+          <div class="form-grid">
+            <label>Cliente<select id="posClient"></select></label>
+            <label>Articulo<select id="posProduct"></select></label>
+            <label>Cantidad<input id="posQty" type="number" min="1" value="1"></label>
+          </div>
+          <div class="actions">
+            <button id="addToCart">Agregar al ticket</button>
+            <button class="ghost" id="clearCart">Vaciar ticket</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Concepto</th><th>Cant.</th><th>Precio</th><th>Total</th><th></th></tr></thead>
+              <tbody id="cartRows"></tbody>
+            </table>
+          </div>
+          <div class="total-bar">
+            <strong id="cartTotal">$0.00</strong>
+            <button id="processPosSale">Procesar e imprimir ticket</button>
+          </div>
+        </article>
+        <article class="panel">
+          <div class="panel-head">
+            <h2>Simuladores por canal</h2>
+            <span class="pill blue">Estado global</span>
+          </div>
+          <p class="muted">Cada venta descuenta inventario, crea factura, actualiza graficas, registra bitacora y, si aplica, genera envio o recoleccion.</p>
+          <button class="full" id="runOnlineOrder">Pedido online</button>
+          <button class="full secondary" id="runCorporateOrder">Venta B2B corporativa</button>
+          <div class="document-mini" id="lastOperation"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="screen" id="clients">
+      <article class="panel">
+        <div class="panel-head">
+          <h2>Gestion de clientes</h2>
+          <button id="exportClients">Exportar clientes</button>
+        </div>
+        <div class="form-grid five">
+          <label>Nombre<input id="clientName" placeholder="Boo Thompson"></label>
+          <label>Correo<input id="clientEmail" type="email" placeholder="boo@humanmail.com"></label>
+          <label>Tipo<select id="clientType"><option>Cliente Individual</option><option>Cliente Corporativo</option></select></label>
+          <label>Canal<select id="clientChannel"><option>Online</option><option>Punto Fisico</option><option>Corporaciones</option></select></label>
+          <label>Sucursal<select id="clientBranch"></select></label>
+        </div>
+        <div class="actions">
+          <button id="createClient">Registrar cliente</button>
+          <button class="ghost" data-filter-client="all">Todos</button>
+          <button class="ghost" data-filter-client="Cliente Individual">Individuales</button>
+          <button class="ghost" data-filter-client="Cliente Corporativo">Corporativos</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Cliente</th><th>Tipo</th><th>Canal</th><th>Sucursal/Depto.</th><th>Compras</th><th>Total</th><th>Acciones</th></tr></thead>
+            <tbody id="clientRows"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section class="screen" id="inventory">
+      <article class="panel">
+        <div class="panel-head">
+          <h2>Inventario por sucursal</h2>
+          <button id="exportInventory">Exportar inventario</button>
+        </div>
+        <div class="stock-filters">
+          <button data-stock-filter="all">Total productos</button>
+          <button data-stock-filter="low">Stock bajo (&lt;10)</button>
+          <button data-stock-filter="zero">Sin stock</button>
+          <button data-stock-filter="available">Disponibles</button>
+        </div>
+        <div class="form-grid five">
+          <label>Nombre<input id="productName" placeholder="Laptop Lenovo ThinkPad E16"></label>
+          <label>SKU<input id="productSku" placeholder="MI-ENER-900"></label>
+          <label>Categoria<input id="productCategory" placeholder="Computo"></label>
+          <label>Precio<input id="productPrice" type="number" min="1" placeholder="2500"></label>
+          <label>Stock<input id="productStock" type="number" min="0" placeholder="20"></label>
+        </div>
+        <button id="createProduct">Registrar nuevo producto</button>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>SKU</th><th>Producto</th><th>Categoria</th><th>Sucursal</th><th>Stock</th><th>Precio</th><th>Acciones</th></tr></thead>
+            <tbody id="inventoryRows"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section class="screen" id="billing">
+      <div class="grid two">
+        <article class="panel">
+          <div class="panel-head">
+            <h2>Generar CFDI fiscal</h2>
+            <span class="pill green">IVA 16%</span>
+          </div>
+          <div class="form-grid">
+            <label>Cliente<select id="invoiceClient"></select></label>
+            <label>Canal<select id="invoiceChannel"><option>Online</option><option>Punto Fisico</option><option>Corporaciones</option></select></label>
+            <label>Concepto<input id="invoiceConcept" placeholder="Venta de articulos comerciales"></label>
+            <label>Importe<input id="invoiceAmount" type="number" min="1" value="1200"></label>
+          </div>
+          <div class="invoice-preview">
+            <span>Subtotal <strong id="invoiceSubtotal">$0.00</strong></span>
+            <span>IVA <strong id="invoiceTax">$0.00</strong></span>
+            <span>Total <strong id="invoiceTotal">$0.00</strong></span>
+          </div>
+          <button id="issueInvoice">Emitir CFDI</button>
+        </article>
+        <article class="panel">
+          <div class="panel-head">
+            <h2>Facturas emitidas</h2>
+            <button id="exportInvoices">Exportar facturas</button>
+          </div>
+          <div class="form-grid">
+            <label>Buscar<input id="invoiceSearch" placeholder="Folio o cliente"></label>
+            <label>Canal<select id="invoiceFilter"><option>Todos</option><option>Online</option><option>Punto Fisico</option><option>Corporaciones</option></select></label>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Folio</th><th>Cliente</th><th>Canal</th><th>Total</th><th>Estado</th><th>Archivos</th></tr></thead>
+              <tbody id="invoiceRows"></tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="screen" id="shipping">
+      <article class="panel">
+        <div class="panel-head">
+          <h2>Gestion de envios</h2>
+          <button id="exportShipments">Exportar envios</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Guia</th><th>Canal</th><th>Cliente</th><th>Sucursal</th><th>Destino</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody id="shipmentRows"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section class="screen" id="access">
+      <div class="grid two">
+        <article class="panel">
+          <div class="panel-head">
+          <h2>Empleados</h2>
+            <button id="exportEmployees">Exportar empleados</button>
+          </div>
+          <div class="form-grid">
+            <label>Nombre<input id="employeeName" placeholder="Randall Boggs"></label>
+            <label>Correo<input id="employeeEmail" type="email" placeholder="randall@monsters.inc"></label>
+            <label>Rol<select id="employeeRole"></select></label>
+            <label>Sucursal<select id="employeeBranch"></select></label>
+          </div>
+          <button id="createEmployee">Registrar empleado</button>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Sucursal</th><th>Estado</th><th>Acciones</th></tr></thead>
+              <tbody id="employeeRows"></tbody>
+            </table>
+          </div>
+        </article>
+        <article class="panel">
+          <div class="panel-head">
+            <h2>Roles y permisos</h2>
+            <button id="saveRoleChanges">Guardar cambios</button>
+          </div>
+          <div class="form-grid">
+            <label>Rol<select id="roleEditor"></select></label>
+            <label>Nuevo rol<input id="newRoleName" placeholder="Supervisor CDA"></label>
+          </div>
+          <div id="permissionChecklist" class="checklist"></div>
+          <button id="createRole">Crear rol con permisos</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="screen" id="cut">
+      <article class="panel">
+        <div class="panel-head">
+          <h2>Corte de caja personalizado</h2>
+          <button id="downloadCut">Descargar reporte de corte</button>
+        </div>
+        <div class="form-grid four">
+          <label>Periodo<select id="cutPeriod"><option>Semanal</option><option>Mensual</option><option>Personalizado</option></select></label>
+          <label>Inicio<input id="cutStart" type="date"></label>
+          <label>Fin<input id="cutEnd" type="date"></label>
+          <label>Accion<button id="processCut" type="button">Procesar corte</button></label>
+        </div>
+        <div class="kpis" id="cutCards"></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Canal</th><th>Ventas</th><th>Subtotal</th><th>IVA</th><th>Total</th></tr></thead>
+            <tbody id="cutRows"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section class="screen" id="logs">
+      <article class="panel">
+        <div class="panel-head">
+          <h2>Bitacora de la planta</h2>
+          <button id="exportLogs">Exportar bitacora</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Fecha exacta</th><th>Usuario/Rol</th><th>Canal</th><th>Modulo</th><th>Accion</th><th>Detalle</th></tr></thead>
+            <tbody id="logRows"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <div class="modal" id="modal">
+    <div class="modal-card">
+      <div class="panel-head">
+        <h2 id="modalTitle">Documento</h2>
+        <button class="ghost" id="closeModal">Cerrar</button>
+      </div>
+      <div id="modalBody"></div>
+      <div class="actions end">
+        <button id="printModal">Imprimir</button>
+        <button id="downloadModal">Descargar HTML</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer"></div>
+  <script src="script.js"></script>
+</body>
+</html>

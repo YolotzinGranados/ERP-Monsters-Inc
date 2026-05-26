@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes — MonsterERP</title>
+    <link rel="stylesheet" href="../../assets/css/global.css">
+</head>
+<body>
+    <div class="erp-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <span class="brand-name">🦾 MonsterERP</span>
+                <button class="toggle-btn" id="toggleSidebar">☰</button>
+            </div>
+            <nav class="sidebar-nav"><ul>
+                <li><a href="./dashboard.html"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></a></li>
+                <li><a href="./clientes.html"><span class="nav-icon">👥</span><span class="nav-label">Clientes</span></a></li>
+                <li><a href="./ventas.html"><span class="nav-icon">💰</span><span class="nav-label">Ventas</span></a></li>
+                <li><a href="./inventario.html"><span class="nav-icon">📦</span><span class="nav-label">Inventario</span></a></li>
+                <li><a href="./reportes.html"><span class="nav-icon">📈</span><span class="nav-label">Reportes</span></a></li>
+                <li><a href="./facturas.html"><span class="nav-icon">🧾</span><span class="nav-label">Facturación</span></a></li>
+                <li><a href="./envios.html"><span class="nav-icon">🚚</span><span class="nav-label">Envíos</span></a></li>
+            </ul></nav>
+        </aside>
+        <div class="main-wrapper" id="mainWrapper">
+            <header class="topbar">
+                <h1 class="topbar-title">Reportes Exportables</h1>
+                <div class="topbar-actions">
+                    <button class="btn btn-ghost btn-icon" id="darkModeBtn">🌙</button>
+                    <button class="btn btn-danger btn-sm" id="logoutBtn">Salir</button>
+                </div>
+            </header>
+            <main class="page-content">
+
+                <!-- FILTROS FECHA -->
+                <div class="card" style="margin-bottom:24px;">
+                    <h2 style="font-size:15px;font-weight:700;margin-bottom:16px;">Filtros globales</h2>
+                    <div class="form-grid">
+                        <div>
+                            <label style="font-size:13px;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:6px;">Fecha inicio</label>
+                            <input type="date" id="fechaInicio">
+                        </div>
+                        <div>
+                            <label style="font-size:13px;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:6px;">Fecha fin</label>
+                            <input type="date" id="fechaFin">
+                        </div>
+                        <div>
+                            <label style="font-size:13px;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:6px;">Canal</label>
+                            <select id="canalFilter">
+                                <option value="">Todos</option>
+                                <option value="Fisica">Física</option>
+                                <option value="Linea">Línea</option>
+                                <option value="Corporativo">Corporativo</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size:13px;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:6px;">Región</label>
+                            <select id="regionFilter">
+                                <option value="">Todas</option>
+                                <option value="Norte">Norte</option>
+                                <option value="Centro">Centro</option>
+                                <option value="Corporativo">Corporativo</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TARJETAS DE REPORTES -->
+                <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px;">
+                    <div class="card">
+                        <div style="font-size:36px;margin-bottom:14px;">📊</div>
+                        <h2 style="font-size:16px;font-weight:700;margin-bottom:8px;">Reporte de Ventas</h2>
+                        <p style="font-size:14px;color:var(--text-secondary);margin-bottom:18px;">Exporta todas las ventas con detalle por canal y región.</p>
+                        <button class="btn btn-primary" onclick="downloadReport('ventas')">⬇ Descargar CSV</button>
+                    </div>
+                    <div class="card">
+                        <div style="font-size:36px;margin-bottom:14px;">📦</div>
+                        <h2 style="font-size:16px;font-weight:700;margin-bottom:8px;">Reporte de Inventario</h2>
+                        <p style="font-size:14px;color:var(--text-secondary);margin-bottom:18px;">Exporta inventario multi-sucursal con estado de stock.</p>
+                        <button class="btn btn-success" onclick="downloadReport('inventario')">⬇ Descargar CSV</button>
+                    </div>
+                    <div class="card">
+                        <div style="font-size:36px;margin-bottom:14px;">👥</div>
+                        <h2 style="font-size:16px;font-weight:700;margin-bottom:8px;">Reporte de Clientes</h2>
+                        <p style="font-size:14px;color:var(--text-secondary);margin-bottom:18px;">Exporta clientes corporativos e individuales.</p>
+                        <button class="btn btn-warning" onclick="downloadReport('clientes')">⬇ Descargar CSV</button>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+    <div id="toastContainer"></div>
+    <script src="../../assets/js/layout.js"></script>
+    <script src="../../assets/js/reportes.js"></script>
+</body>
+</html>
