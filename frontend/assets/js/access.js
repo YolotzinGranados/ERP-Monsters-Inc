@@ -1,19 +1,4 @@
-// Helper para peticiones a la API
-async function apiRequest(action, options = {}) {
-    const url = `../../api/erp.php?action=${action}`;
-    const response = await fetch(url, {
-        headers: { 'Content-Type': 'application/json' },
-        ...options
-    });
-    const data = await response.json();
-    if (!response.ok || data.error) {
-        throw new Error(data.error || 'No fue posible completar la operación.');
-    }
-    return data;
-}
-
-// Helper para obtener la sesión
-const getSession = () => JSON.parse(sessionStorage.getItem('monster_erp_session') || 'null');
+const getSession = () => JSON.parse(localStorage.getItem('user') || 'null');
 
 document.addEventListener('DOMContentLoaded', () => {
     const state = {
@@ -24,37 +9,52 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedRoleId: null,
     };
 
-    const employeeTable = document.getElementById('employeeRows');
-    const roleEditorSelect = document.getElementById('roleEditor');
+    const employeeTable       = document.getElementById('employeeRows');
+    const roleEditorSelect    = document.getElementById('roleEditor');
     const permissionChecklist = document.getElementById('permissionChecklist');
-    const savePermissionsBtn = document.getElementById('saveRoleChanges');
-    const createEmployeeBtn = document.getElementById('createEmployee');
+    const savePermissionsBtn  = document.getElementById('saveRoleChanges');
+    const createEmployeeBtn   = document.getElementById('createEmployee');
 
     async function fetchData() {
         try {
-            const data = await apiRequest('initial_data');
-            state.employees = data.employees;
-            state.roles = data.roles;
-            state.branches = data.branches;
-            state.allPermissions = [...new Set(data.rolePermissions.map(p => p.nombre_permiso))];
+            // Cargar empleados
+            const empRes = await fetch('http://localhost:3000/routes/empleados.php?action=list', { credentials: 'include' });
+            const empData = await empRes.json();
+            state.employees = empData.data || [];
+
+            // Cargar roles
+            const rolRes = await fetch('http://localhost:3000/routes/roles.php?action=list', { credentials: 'include' });
+            const rolData = await rolRes.json();
+            state.roles = rolData.data || [];
+
+            // Cargar sucursales
+            const sucRes = await fetch('http://localhost:3000/routes/clientes.php?action=sucursales', { credentials: 'include' });
+            const sucData = await sucRes.json();
+            state.branches = sucData.data || [];
+
             render();
         } catch (error) {
-            showToast('Error al cargar datos de acceso: ' + error.message, 'error');
+            showToast('Error al cargar datos: ' + error.message, 'error');
         }
     }
 
     function render() {
         renderEmployees();
         renderRoleEditor();
+        renderBranches();
     }
 
     function renderEmployees() {
         if (!employeeTable) return;
+        if (!state.employees.length) {
+            employeeTable.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">👤</div><p>Sin empleados registrados</p></div></td></tr>';
+            return;
+        }
         employeeTable.innerHTML = state.employees.map(emp => `
             <tr>
                 <td>${escapeHtml(emp.nombre)}</td>
-                <td style="font-size: 13px;">${escapeHtml(emp.correo)}</td>
-                <td><span class="badge badge-purple">${escapeHtml(emp.rol)}</span></td>
+                <td style="font-size:13px;">${escapeHtml(emp.correo)}</td>
+                <td><span class="badge badge-purple">${escapeHtml(emp.rol || 'Sin rol')}</span></td>
                 <td>${escapeHtml(emp.sucursal || 'N/A')}</td>
                 <td>
                     <span class="badge ${emp.activo ? 'badge-green' : 'badge-red'}">
@@ -62,7 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     </span>
                 </td>
                 <td>
-                    <button class="btn btn-sm btn-ghost" onclick="toggleEmployee(${emp.id}, ${emp.activo})">${emp.activo ? 'Desactivar' : 'Activar'}</button>
+                    <button class="btn btn-sm btn-ghost" onclick="toggleEmployee(${emp.id_empleado}, ${emp.activo ? 1 : 0})">
+                        ${emp.activo ? 'Desactivar' : 'Activar'}
+                    </button>
                 </td>
             </tr>
         `).join('');
@@ -72,42 +74,50 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!roleEditorSelect) return;
         const employeeRoleSelect = document.getElementById('employeeRole');
         const options = state.roles.map(role =>
-            `<option value="${role.id}">${escapeHtml(role.nombre)}</option>`
+            `<option value="${role.id_rol}">${escapeHtml(role.nombre_rol)}</option>`
         ).join('');
 
-        roleEditorSelect.innerHTML = options;
-        if (employeeRoleSelect) employeeRoleSelect.innerHTML = options;
+        roleEditorSelect.innerHTML = '<option value="">— Seleccionar rol —</option>' + options;
+        if (employeeRoleSelect) employeeRoleSelect.innerHTML = '<option value="">— Seleccionar rol —</option>' + options;
 
-        if (state.selectedRoleId) {
+        if (state.roles.length > 0) {
+            state.selectedRoleId = state.roles[0].id_rol;
             roleEditorSelect.value = state.selectedRoleId;
-        } else if (state.roles.length > 0) {
-            state.selectedRoleId = state.roles[0].id;
-            roleEditorSelect.value = state.selectedRoleId;
-        }
-        
-        if (state.selectedRoleId) {
             loadPermissionsForRole(state.selectedRoleId);
         }
     }
 
+    function renderBranches() {
+        const branchSelect = document.getElementById('employeeBranch');
+        if (!branchSelect) return;
+        branchSelect.innerHTML = '<option value="">— Sucursal (opcional) —</option>' +
+            state.branches.map(b => `<option value="${b.id_sucursal}">${escapeHtml(b.nombre)}</option>`).join('');
+    }
+
     async function loadPermissionsForRole(roleId) {
-        if (!permissionChecklist) return;
+        if (!permissionChecklist || !roleId) return;
         permissionChecklist.innerHTML = '<div class="spinner"></div>';
         try {
-            const permissions = await apiRequest(`get_role_permissions&role_id=${roleId}`);
-            state.permissions = permissions;
+            const response = await fetch(`http://localhost:3000/routes/roles.php?action=get_permissions&role_id=${roleId}`, {
+                credentials: 'include'
+            });
+            const permissions = await response.json();
+            state.permissions = Array.isArray(permissions) ? permissions : [];
             renderPermissions();
         } catch (error) {
-            showToast('Error al cargar permisos: ' + error.message, 'error');
-            permissionChecklist.innerHTML = `<p class="alert alert-danger">${error.message}</p>`;
+            permissionChecklist.innerHTML = `<p style="color:var(--accent-red);padding:12px;">${error.message}</p>`;
         }
     }
 
     function renderPermissions() {
         if (!permissionChecklist) return;
+        if (!state.permissions.length) {
+            permissionChecklist.innerHTML = '<p style="color:var(--text-muted);padding:12px;">Sin permisos disponibles</p>';
+            return;
+        }
         permissionChecklist.innerHTML = state.permissions.map(p => `
             <label class="checkbox-item">
-                <input type="checkbox" value="${p.id_permiso}" ${p.asignado ? 'checked' : ''}>
+                <input type="checkbox" value="${p.id_permiso}" ${parseInt(p.asignado) ? 'checked' : ''}>
                 <span>${escapeHtml(p.nombre_permiso)}</span>
             </label>
         `).join('');
@@ -119,66 +129,96 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     savePermissionsBtn?.addEventListener('click', async () => {
-        const selectedPermissions = [...permissionChecklist.querySelectorAll('input:checked')].map(input => input.value);
-        
+        if (!state.selectedRoleId) {
+            showToast('Selecciona un rol primero', 'warning');
+            return;
+        }
+        const selectedPermissions = [...permissionChecklist.querySelectorAll('input:checked')].map(i => i.value);
         try {
-            await apiRequest('save_role_permissions', {
+            const response = await fetch('http://localhost:3000/routes/roles.php?action=save_permissions', {
                 method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     rol_id: state.selectedRoleId,
                     permisos: selectedPermissions,
-                    empleado: getSession()?.id
+                    empleado: getSession()?.id_empleado ?? 1
                 })
             });
-            showToast('Permisos guardados con éxito', 'success');
-            fetchData(); // Recargar para reflejar cambios
+            const result = await response.json();
+            showToast(result.success ? 'Permisos guardados' : result.message, result.success ? 'success' : 'error');
         } catch (error) {
-            showToast('Error al guardar permisos: ' + error.message, 'error');
+            showToast('Error: ' + error.message, 'error');
         }
     });
 
     createEmployeeBtn?.addEventListener('click', async () => {
-        const nombre = document.getElementById('employeeName').value;
-        const correo = document.getElementById('employeeEmail').value;
-        const rol_id = document.getElementById('employeeRole').value;
+        const nombre      = document.getElementById('employeeName').value.trim();
+        const correo      = document.getElementById('employeeEmail').value.trim();
+        const rol_id      = document.getElementById('employeeRole').value;
         const sucursal_id = document.getElementById('employeeBranch').value;
 
+        if (!nombre || !correo || !rol_id) {
+            showToast('Nombre, correo y rol son obligatorios', 'warning');
+            return;
+        }
+
         try {
-            await apiRequest('create_employee', {
+            const response = await fetch('http://localhost:3000/routes/empleados.php?action=create', {
                 method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     nombre,
                     correo,
                     rol_id,
-                    sucursal_id,
-                    empleado: getSession()?.id
+                    sucursal_id: sucursal_id || null,
+                    empleado: getSession()?.id_empleado ?? 1
                 })
             });
-            showToast('Empleado creado con éxito', 'success');
-            fetchData(); // Recargar
+            const result = await response.json();
+            if (result.success) {
+                showToast('Empleado creado. Contraseña: Monster123*', 'success');
+                document.getElementById('employeeName').value  = '';
+                document.getElementById('employeeEmail').value = '';
+                fetchData();
+            } else {
+                showToast(result.message || 'Error al crear empleado', 'error');
+            }
         } catch (error) {
-            showToast('Error al crear empleado: ' + error.message, 'error');
+            showToast('Error: ' + error.message, 'error');
         }
     });
 
-    // Inicializar
     fetchData();
 });
 
-// Funciones globales para botones en la tabla (si es necesario)
 async function toggleEmployee(id, isActive) {
-    const action = isActive ? 'desactivar' : 'reactivar';
-    if (!confirm(`¿Estás seguro de que quieres ${action} a este empleado?`)) return;
-
+    const accion = isActive ? 'desactivar' : 'activar';
+    if (!confirm(`¿Seguro que quieres ${accion} a este empleado?`)) return;
     try {
-        await apiRequest('toggle_employee', {
+        const response = await fetch('http://localhost:3000/routes/empleados.php?action=toggle', {
             method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                id: id,
-                empleado: getSession()?.id
+                id_empleado: id,
+                empleado: JSON.parse(localStorage.getItem('user') || '{}')?.id_empleado ?? 1
             })
         });
-        showToast(`Empleado ${action}do.`, 'success');
-        location.reload(); // Recargar para ver el cambio
-    } catch (error) { showToast(error.message, 'error'); }
+        const result = await response.json();
+        showToast(result.success ? `Empleado ${accion}do` : result.message, result.success ? 'success' : 'error');
+        location.reload();
+    } catch (error) {
+        showToast(error.message, 'error');
+    }
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
 }
